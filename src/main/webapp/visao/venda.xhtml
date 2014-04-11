@@ -1,0 +1,303 @@
+<?xml version	= "1.0" 
+	  encoding	= "ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<ui:composition	xmlns		= "http://www.w3.org/1999/xhtml"
+				xmlns:h		= "http://java.sun.com/jsf/html"
+				xmlns:f		= "http://java.sun.com/jsf/core"
+				xmlns:p		= "http://primefaces.org/ui"
+				xmlns:ui	= "http://java.sun.com/jsf/facelets"
+				xmlns:pe 	= "http://primefaces.org/ui/extensions"
+				template	= "/layout/interno.xhtml">
+	<ui:define name = "Conteudo">
+		<h:form id="frCadastro">
+			<p:fieldset style = "padding	: 5px; width		: 828px;" id = "area" >
+				<h:panelGrid	columns		= "2" styleClass="porCima" style = "border: solid 0px; width: 828px;" cellspacing	= "0">
+					<h:panelGrid columns = "3" style = "border: solid 0px; width: 642px;" cellspacing = "1" id = "pnCabecalho">
+						<p:outputLabel	for = "txPedido" value	= "N.Pedido*" />
+						<p:outputLabel for = "txData" value = "Data Emissão*"/>
+						<p:outputLabel value = "Forma de Pagamento*" for = "cbFormaPagamento"/>
+						<p:column>
+							<p:commandButton icon= "ui-icon-circle-zoomin" style="margin-left:3px;" action="#{clienteMB.abrirPesquisa()}" oncomplete="dlPesquisaCliente.show()"/>
+							<p:inputText id = "txPedido" style = "margin-top :7px; width:80px;" value="#{pedidoVendaMB.formulario.id}">
+								<p:watermark for="txPedido" value="Novo" />
+								<p:ajax event="change" listener="#{pedidoVendaMB.buscarPedido()}" update="@form"/>
+							</p:inputText>
+						</p:column>
+						<p:calendar id = "txData" 
+									styleClass ="calendario"
+									effect		= "slideDown"
+									navigator	= "true"
+									yearRange	= "100"
+									size		= "8"
+									value		= "#{pedidoVendaMB.formulario.dataEmissao}"
+									pattern		= "dd/MM/yyyy"
+									display		= "inline" />
+						<p:selectOneMenu id = "cbFormaPagamento" binding = "#{cbFormaPagamento}" style = "width:250px; margin-top : 7px;" converter="conversorEntidade" value="#{pedidoVendaMB.formulario.formaPagamento}" >
+							<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+							<f:selectItems value = "#{pedidoVendaMB.listaFormasPagamento}" var = "formaPagamento" itemLabel = "#{formaPagamento.nome}" itemValue="#{formaPagamento}"/>
+							<p:tooltip for="cbFormaPagamento" rendered ="#{!cbFormaPagamento.valid}">
+								<h:message for = "cbFormaPagamento" tooltip="true" styleClass ="campoMensagem" />
+							</p:tooltip>
+					 	</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid columns = "1" style = "border: solid 0px;">
+						<p:outputLabel value = "Total do Pedido"/>
+						<h:panelGrid columns = "1" style = "border: solid 1px; width: 178px;" >
+							<h:outputText value = "#{pedidoVendaMB.formulario.total}" style = "display : block; width: 178px; font: bold 20px Verdana; text-align : right;" id = "lbTotal" >
+								<f:convertNumber currencySymbol="R$ " type="currency" />
+							</h:outputText>
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<p:fieldset>
+					<h:panelGrid columns = "2" style = "border: solid 0px; width: 828px;" cellspacing ="3" id = "pnEnvolvidos">
+						<p:outputLabel for = "cbVendedor" value = "Vendedor*" /> 
+						<p:outputLabel for = "cbTransportadora" value = "Transportadora*" />
+						<p:selectOneMenu id = "cbVendedor" style = "width:394px;" converter="conversorEntidade" value="#{pedidoVendaMB.formulario.vendedor}">
+							<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+							<f:selectItems value = "#{pedidoVendaMB.listaVendedores}" var = "vendedor" itemLabel = "#{vendedor.nome}" itemValue="#{vendedor}"/>
+						 </p:selectOneMenu>
+						<p:selectOneMenu id = "cbTransportadora" style = "width:394px;" converter="conversorEntidade" value="#{pedidoVendaMB.formulario.transportadora}">
+							<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+							<f:selectItems value = "#{pedidoVendaMB.listaTransportadoras}" var = "transportadora" itemLabel = "#{transportadora.razaoSocial}" itemValue="#{transportadora}"/>
+						 </p:selectOneMenu>
+					</h:panelGrid>
+				</p:fieldset>
+				
+				<p:panel id="pnCliente" style="" >
+					<h:panelGrid columns = "3" style = "border: none;" cellspacing ="3">
+						<p:spacer/>
+						<p:outputLabel for = "txCNPJ" value = "Cnpj*" />
+						<p:outputLabel value = "Razão Social" />
+						<p:commandButton icon= "ui-icon-circle-zoomin" style="margin-left:3px;" action="#{clienteMB.abrirPesquisa()}" oncomplete="dlPesquisaCliente.show()"/>
+						<p:inputMask id = "txCNPJ" mask = "99.999.999/9999-99" binding = "#{txCnpj}" converter="conversorSemFormatoString" style="width : 111px;" value ="#{pedidoVendaMB.formulario.cliente.cnpj}">
+							<p:tooltip for="txCNPJ" rendered ="#{!txCnpj.valid}">
+								<h:message for = "txCNPJ" tooltip="true" styleClass ="campoMensagem" />
+							</p:tooltip>
+							<p:ajax event="change" listener="#{pedidoVendaMB.pesquisarCnpj()}" update="pnCliente"/>
+						</p:inputMask>
+						<h:inputText disabled="true" readonly="true" style= "width: 630px ;" value="#{pedidoVendaMB.formulario.cliente.razaoSocial}" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns = "4" style = "border: none;" cellspacing ="3">
+						<p:outputLabel value = "Cep" />
+						<p:outputLabel value = "Uf" />
+						<p:outputLabel value = "Município" />
+						<p:outputLabel value = "Bairro" />
+						<h:inputText style="width : 76px;" disabled="true" readonly="true" converter = "conversorCep" value="#{pedidoVendaMB.formulario.cliente.cep}" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all"/>
+						<h:inputText disabled="true" readonly="true" style= "width: 18px ;"  styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value="#{pedidoVendaMB.formulario.cliente.uf.id}" />
+						<h:inputText disabled="true" readonly="true" style= "width: 325px ;" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value="#{pedidoVendaMB.formulario.cliente.municipio.nome}"/>
+						<h:inputText disabled="true" readonly="true" style= "width: 325px ;" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value="#{pedidoVendaMB.formulario.cliente.bairro.nome}"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns = "1" style = "border: none;" cellspacing ="3">
+						<p:outputLabel value = "Endereço" />
+						<h:inputText disabled="true" readonly="true" style= "width: 784px ;" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value="#{pedidoVendaMB.formulario.cliente.logradouro}"/>
+					</h:panelGrid>
+				</p:panel>
+				
+				<p:fieldset style="width:828px;">
+					<h:panelGrid id = "pnProduto" columns = "7" style = "width:828px; border: solid 0px; padding-top:0px;" cellspacing="3" >
+						<p:spacer/>
+						<p:outputLabel for = "txProdutoCodigo" value = "Código" />
+						<p:outputLabel value = "Descrição" />
+						<p:outputLabel value = "Unidade" />
+						<p:outputLabel  value = "V Unitário" />
+						<p:outputLabel  value = "Quant" />
+						<p:spacer/>
+						<p:commandButton id="btPesquisaProduto" icon= "ui-icon-circle-zoomin" style="margin-left:3px;" action="#{produtoMB.abrirPesquisa()}" oncomplete="dlPesquisaProduto.show()"/>
+						<p:inputText id = "txProdutoCodigo" binding = "#{txProdutoCodigo}" style="width : 60px;" value = "#{pedidoVendaMB.formularioItem.produto.codigo}" >
+							<p:tooltip for="txProdutoCodigo" rendered ="#{!txProdutoCodigo.valid}">
+								<h:message for = "txProdutoCodigo" tooltip="true" styleClass ="campoMensagem" />
+							</p:tooltip>
+							<p:ajax event="change" listener="#{pedidoVendaMB.pesquisarProduto()}" update ="pnProduto"/>
+						</p:inputText>
+						<h:inputText disabled="true" readonly="true"  style= "width: 300px ;" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value = "#{pedidoVendaMB.formularioItem.produto.nome}"/>
+						<h:inputText disabled="true" readonly="true"  style= "width: 200px ;" styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all" value =  "#{pedidoVendaMB.formularioItem.produto.unidadeMedida.nome}"/>
+						<pe:inputNumber id="txValorUnitario" style = "width: 70px;" symbol="R$ " maxValue="999999" decimalPlaces="2" value = "#{pedidoVendaMB.formularioItem.valorUnitario}">
+							<p:ajax event="change" update="btAddProduto" />
+						</pe:inputNumber>
+						<pe:inputNumber id="txQuantidade" decimalPlaces="0" style = "width: 45px;" maxValue="99999" value =  "#{pedidoVendaMB.formularioItem.quantidade}">
+							<p:ajax event="change" update="btAddProduto" />
+						</pe:inputNumber>
+						<p:commandButton id="btAddProduto" value="Add" disabled="#{!pedidoVendaMB.podeAddProduto()}" action = "#{pedidoVendaMB.addItemPedido()}" partialSubmit="true" process="pnProduto" update = "lbTotal, pnProduto, tbItens" />
+					</h:panelGrid>
+				
+				</p:fieldset>
+				
+				<p:dataTable id						= "tbItens"
+								 var					= "item"
+								 value					= "#{pedidoVendaMB.formulario.itens}"
+								 paginator				= "true"
+								 rows					= "5"
+								 lazy="false"
+								 emptyMessage			= "Pedido sem Itens."
+								 paginatorAlwaysVisible	= "true"
+								 paginatorPosition		= "bottom"
+								 paginatorTemplate		= "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								 rowsPerPageTemplate	 = "5,10,15">
+					<f:facet name = "header">
+						Itens do Pedido
+					</f:facet>
+					
+					<p:column headerText = "Código" width = "49">
+						<h:outputText value = "#{item.produto.codigo}" />
+					</p:column>
+					
+					<p:column	headerText = "Descrição" width = "560" >
+						<h:outputText value = "#{item.produto.nome}" />
+					</p:column>
+					
+					<p:column	headerText = "V.Unitário" width = "90" style = "text-align:right" >
+						<h:outputText value = "#{item.valorUnitario}">
+							<f:convertNumber currencySymbol="R$ " type="currency" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column	headerText = "Quantidade" width = "35" style = "text-align:right">
+						<h:outputText value = "#{item.quantidade}">
+							<f:convertNumber type="number" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column	headerText = "Sub Total" width = "96">
+						<h:outputText value = "#{item.subTotal}" style = "text-align:right" >
+							<f:convertNumber currencySymbol="R$ "  type="currency" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column	headerText = "Ação" width = "21">
+						<p:commandButton id= "btRemoveItemPedido" actionListener="#{pedidoVendaMB.removeItemPedido}" style="width:15px;height:15px;" icon="ui-icon ui-icon-circle-close" partialSubmit="true" process="@this" title="Remover" update ="tbItens, :frCadastro:lbTotal">
+							<f:attribute name="item" value="#{item}"/>
+						</p:commandButton>
+					</p:column>
+					
+				</p:dataTable>
+				
+				<p:fieldset>
+					<h:panelGrid columns = "4" style = "border: none;" cellspacing ="3">
+						<p:commandButton value="Novo" update="area" action="#{pedidoVendaMB.novo()}" process = "@this">
+							<p:resetInput target="area" />
+						</p:commandButton>
+						<p:commandButton value="Salvar"  actionListener ="#{pedidoVendaMB.salvar()}" partialSubmit="true" process="@this,pnCabecalho,pnEnvolvidos,pnCliente" update="@form" />
+						<p:commandButton value="Excluir"  type = "button" onclick = "dlExcluir.show()" disabled="#{pedidoVendaMB.ePedidoNovo()}"/>
+						<p:commandButton value="Imprimir" type = "button" disabled="#{pedidoVendaMB.ePedidoNovo()}" />
+					</h:panelGrid>
+				</p:fieldset>
+				
+				<p:confirmDialog message 	= "Confima a exclusão do Pedido?"
+								 header 		= "Confirmação"
+								 severity	= "alert"
+								 widgetVar	= "dlExcluir"
+								 style     =  "text-align:center">
+					<center>
+						<p:commandButton	value	= "Não"
+											id		= "btNao"
+											onclick	= "dlExcluir.hide();"
+											icon="ui-icon-close"
+											style = "margin-left : 10px; float: left;"
+											type	= "button" />
+						<p:commandButton	value	= "Sim" 
+											action	= "#{pedidoVendaMB.excluir()}"
+											icon="ui-icon-check"
+											style = "margin-right : 10px; float : right;"
+											update	= "@form"
+											onclick	= "dlExcluir.hide()"/>
+					</center>
+				</p:confirmDialog>
+				
+			</p:fieldset>
+		</h:form>
+		
+		<h:form id = "frPesquisaCliente">
+			<p:dialog header="Pesquisa de Cliente" id="jnPesquisaCliente" widgetVar="dlPesquisaCliente" resizable="false" draggable="true" width="700" minHeight="300" showEffect="fade" hideEffect="fade" modal="true">  
+				<h:panelGrid	columns		= "3" style = "border: none;" cellspacing = "3">
+					<p:outputLabel	for		= "txCNPJPesq" value	= "Cnpj" />
+					<p:outputLabel for = "txRazaoSocialPesq" value = "Razão Social" />
+					<p:outputLabel	value	= "" />
+					<p:inputText id = "txCNPJPesq" style="width : 111px;" value ="#{clienteMB.formularioPesquisa.cnpj}"/>
+					<p:inputText id = "txRazaoSocialPesq"  maxlength="60" value ="#{clienteMB.formularioPesquisa.razaoSocial}" style="width : 457px;"/>
+					<p:commandButton value = "Pesquisar" action = "#{clienteMB.pesquisar()}" process = "@form" update = "tbResultadoCliente"/>
+				</h:panelGrid>
+				<p:dataTable id						= "tbResultadoCliente"
+							 var					= "cliente"
+							 value					= "#{clienteMB.resultadoPesquisa}"
+							 paginator				= "true"
+							 rows					= "5"
+							 selectionMode			= "single"
+							 selection				= "#{pedidoVendaMB.clienteSelecionado}"
+							 lazy="false"
+							 rowKey					= "#{cliente.id}"
+							 emptyMessage			= "Nenhum registro encontrado."
+							 paginatorAlwaysVisible	= "true"
+							 paginatorPosition		= "bottom"
+							 paginatorTemplate		= "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							 rowsPerPageTemplate	 = "5,10,15">
+					<p:ajax event="rowSelect" immediate = "true" update = ":frCadastro:pnCliente" />
+					<f:facet name = "header">
+						Resultado da Pesquisa
+					</f:facet>
+					
+					<p:column headerText = "Cnpj" sortBy = "#{cliente.cnpj}" width = "120">
+						<h:outputText value = "#{cliente.cnpj}" />
+					</p:column>
+					
+					<p:column	headerText = "Razão Social" sortBy = "#{cliente.razaoSocial}" >
+						<h:outputText value = "#{cliente.razaoSocial}" />
+					</p:column>
+				</p:dataTable>
+				<p:commandButton value="Fechar" type="button" onclick="dlPesquisaCliente.hide()" style="margin-top : 5px;" />
+			</p:dialog>
+		</h:form>
+		
+		<h:form id = "frPesquisaProduto">
+			<p:dialog header="Pesquisa de Produto" id="jnPesquisaProduto" widgetVar="dlPesquisaProduto" resizable="false" draggable="true" width="700" minHeight="300" showEffect="fade" hideEffect="fade" modal="true">
+			
+				<h:panelGrid columns = "3" style = "border: none;" cellspacing = "3">
+					<p:outputLabel for = "txCodigoPesq" value  = "Código" />
+					<p:outputLabel for = "txNomePesq" value = "Descrição" />
+					<p:outputLabel value = "" />
+					<p:inputText id = "txCodigoPesq" style="width : 111px;" value ="#{produtoMB.formularioPesquisa.codigo}"/>
+					<p:inputText id = "txNomePesq"  maxlength="60" value ="#{produtoMB.formularioPesquisa.nome}" style="width : 457px;"/>
+					<p:commandButton value = "Pesquisar" action = "#{produtoMB.pesquisar()}" process = "@form" update = "tbResultadoProduto"/>
+				</h:panelGrid>
+				
+				<p:dataTable id = "tbResultadoProduto"
+                                         var                                    = "produto"
+                                         value                                  = "#{produtoMB.resultadoPesquisa}"
+                                         paginator                              = "true"
+                                         rows                                   = "5"
+                                         selectionMode                  = "single"
+                                         selection                              = "#{pedidoVendaMB.produtoSelecionado}"
+                                         lazy                                   = "false"
+                                         rowKey                                 = "#{produto.id}"
+                                         emptyMessage                   = "Nenhum registro encontrado."
+                                         paginatorAlwaysVisible = "true"
+                                         paginatorPosition              = "bottom"
+                                         paginatorTemplate              = "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate    = "5,10,15">
+					<p:ajax event="rowSelect" immediate = "true" update = ":frCadastro:pnProduto" />
+						<f:facet name = "header">
+							Resultado da Pesquisa
+						</f:facet>
+						
+						<p:column headerText = "Código" sortBy = "#{produto.codigo}" width = "120">
+							<h:outputText value = "#{produto.codigo}" />
+						</p:column>
+						
+						<p:column headerText = "Descrição" sortBy = "#{produto.nome}" >
+							<h:outputText value = "#{produto.nome}" />
+						</p:column>
+						
+				</p:dataTable>
+				
+				<p:commandButton value="Fechar" type="button" onclick="dlPesquisaProduto.hide()" style="margin-top : 5px;"/>
+			</p:dialog>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,145 @@
+<?xml version	= "1.0" 
+	  encoding	= "ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns    = "http://www.w3.org/1999/xhtml"
+	  xmlns:h  = "http://java.sun.com/jsf/html"
+	  xmlns:f  = "http://java.sun.com/jsf/core"
+	  xmlns:p  = "http://primefaces.org/ui"
+	  xmlns:ui = "http://java.sun.com/jsf/facelets">
+	
+	<h:head>
+		<meta http-equiv	= "content-type"
+			content		= "text/html; charset = ISO-8859-1" />
+		<meta name			= "generator"
+			content		= "Midianet - http://www.multimidianet.com/ "/>
+		<meta name			= "description" 
+			content		= "Digital - Sistema de Vendas" />
+		
+		<link	type	= "text/css" 
+				rel		= "stylesheet"
+				href	= "${facesContext.externalContext.request.contextPath}/layout/css/digital.css"/>
+				
+		<script	type	= "text/javascript" 
+				src		= "${facesContext.externalContext.request.contextPath}/layout/js/locale-primefaces.js"></script>
+		
+		<title>Digital 2 - Sistema de Vendas</title>
+		
+	</h:head>
+	
+	<h:body>
+		<div class = "geral">
+			<div class = "topo">
+				<div class ="topoConteudo">
+					<!-- 
+					<p class = "logoEstado" style = "margin-left: 60px;"/>
+					<p class = "logo"/>
+					-->
+					<!-- 
+					<p:themeSwitcher style="width:165px" effect="fade" var="tema" id="temaPreview">
+						<f:selectItem itemLabel="Escolha o Tema" itemValue="" />
+						<f:selectItem itemLabel="Aristo" itemValue="aristo" />
+						<f:selectItem itemLabel="Black-Tie" itemValue="black-tie" />
+						<f:selectItem itemLabel="Blitzer" itemValue="bluesky" />
+						<f:selectItem itemLabel="Casablanca" itemValue="casablanca" />
+						<f:selectItem itemLabel="Cupertino" itemValue="cupertino" />
+						<f:selectItem itemLabel="Dark-Hive" itemValue="dark-hive" />
+						<f:selectItem itemLabel="Dot-Luv" itemValue="dot-luv" />
+						<f:selectItem itemLabel="Eggplant" itemValue="eggplant" />
+						<f:selectItem itemLabel="Excite-Bike" itemValue="excite-bike" />
+						<f:selectItem itemLabel="Flick" itemValue="flick" />
+						<f:selectItem itemLabel="Glass-X" itemValue="glass-x" />
+						<f:selectItem itemLabel="Hot-Sneaks" itemValue="hot-sneaks" />
+						<f:selectItem itemLabel="Humanity" itemValue="humanity" />
+						<f:selectItem itemLabel="Le-Frog" itemValue="le-frog" />
+						<f:selectItem itemLabel="Midnight" itemValue="midnight" />
+						<f:selectItem itemLabel="Mint-Choc" itemValue="mint-choc" />
+						<f:selectItem itemLabel="Overcast" itemValue="overcast" />
+						<f:selectItem itemLabel="Pepper-Grinder" itemValue="pepper-grinder" />
+						<f:selectItem itemLabel="Redmond" itemValue="redmond" />
+						<f:selectItem itemLabel="Rocket" itemValue="rocket" />
+						<f:selectItem itemLabel="Sam" itemValue="sam" />
+						<f:selectItem itemLabel="Smoothness" itemValue="smoothness" />
+						<f:selectItem itemLabel="South-Street" itemValue="south-street" />
+						<f:selectItem itemLabel="Start" itemValue="start" />
+						<f:selectItem itemLabel="Sunny" itemValue="sunny" />
+						<f:selectItem itemLabel="Swanky-Purse" itemValue="swanky-purse" />
+						<f:selectItem itemLabel="Trontastic" itemValue="trontastic" />
+						<f:selectItem itemLabel="UI-Darkness" itemValue="ui-darkness" />
+						<f:selectItem itemLabel="UI-Lightness" itemValue="ui-lightness" />
+						<f:selectItem itemLabel="Overcast" itemValue="overcast" />
+						<f:selectItem itemLabel="Vader" itemValue="vader" />
+					</p:themeSwitcher> 
+					 -->
+				</div> 
+					<div style =	"width			: 950px;
+									margin-left		: auto;
+									margin-right	: auto;
+									height			: 15px;
+									margin-top		: 8px;
+									background-color	: transparent;
+									border :none;">
+						
+						<p:ajaxStatus style="float :right; margin-right : 1px;">
+							<f:facet name = "start">
+								<p:graphicImage value="/layout/imagens/ajaxCarga.gif" height="15" style="margin-top : 5px;"/>
+							</f:facet>
+							<f:facet name = "complete">
+								<h:outputText value="" />
+							</f:facet>
+						</p:ajaxStatus>
+						<h:form>
+							<p:menubar style = "padding				: 0 0 0 0;
+												background-color	: transparent;
+												border 				: none;">
+								<p:submenu label = "Cadastro" style = 	"background-color : transparent;
+																		 border			  : none;">
+									<p:submenu	label = "Pessoas" 
+												icon  = "ui-icon-contact">
+										<p:menuitem value 	= "Cliente"
+													icon	= "ui-icon-person"
+													url		= "cliente.xhtml" />
+										<p:menuitem value	= "Fornecedor"
+													icon	= "ui-icon-suitcase" 
+													url		= "fornecedor.xhtml" />
+										<p:menuitem value	= "Transportadora"
+													icon	= "ui-icon-transferthick-e-w" 
+													url		= "transportadora.xhtml" />
+									</p:submenu> 
+									<p:submenu	label = "Estocadores" 
+												icon  = "ui-icon-gear">
+										<p:menuitem value	= "Produto"
+													icon	= "ui-icon-clipboard" 
+													url		= "produto.xhtml" />
+									</p:submenu>
+									<p:separator />
+									<p:menuitem value = "Sair"
+												icon  = "ui-icon-circle-close" 
+												onclick = "confirmacaoSaida.show();"/>  
+								</p:submenu>
+								<p:submenu 	label = "Comercial" 
+											style = 	"background-color : transparent;
+														 border			  : none;">
+									<p:menuitem value 	= "Venda"
+												icon	= "ui-icon-cart"
+												url		= "venda.xhtml" />
+								</p:submenu>
+							</p:menubar>
+						</h:form>
+					</div>
+			</div>
+			<div class = "corpo">
+				<div class = "conteudo">
+						<br />
+						<br />
+						<p:messages autoUpdate	= "true" 
+									globalOnly	= "true"/>
+					<ui:insert name ="Conteudo">
+						<h2>Conteudo</h2>
+					</ui:insert>
+				</div>
+			</div>
+		</div>
+	</h:body>
+</html>

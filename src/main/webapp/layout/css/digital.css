@@ -1,0 +1,312 @@
+/**
+ * Estilo do sistema Digital
+ */
+
+* {
+	margin	:0px 0px 0px 0px;
+	padding	:0px 0px 0px 0px;
+	font	:11px normal arial, verdana, sans-serif;
+}
+
+html,body {
+	margin	:0px 0px 0px 0px;
+	padding	:0px 0px 0px 0px;
+	height	:100%;
+	width:	:100%;
+}
+
+.calendario input {
+ 	width: 70px;
+ 	margin-top :7px;
+}
+
+.porCima td {
+    vertical-align: top;
+}
+
+.porBaixo td {
+    vertical-align: bottom;
+}
+
+.fornecedorBanco td {
+	border : solid 1px;
+}
+
+.fornecedorInterno td {
+	border : none;
+}
+
+a:link{
+	text-decoration	: none;
+}
+
+a:hover {
+	color : #08c;
+}
+
+p {
+	padding-top		: 2px;
+	padding-bottom	: 2px;
+}
+
+h1 { 
+	font			: 16px bolder verdanda, sans-serif;
+	letter-spacing	: -0.05em;
+	clear			: both;
+}
+
+h2 {
+	font			: 24px bolder verdana, sans-serif;
+	letter-spacing	: -0.05em;
+	clear			: both;
+}
+
+.h3 {
+	font			: 24px bolder verdana, sans-serif;
+	letter-spacing	: -0.05em;
+	clear			: both; 
+}
+
+h4 {
+	font			:42px bolder verdana, sans-serif;
+	letter-spacing	: -0.05em;
+	clear			:both; 
+}
+
+.ui-widget {
+	font-size: 11px !important;
+}
+
+.semBorda, .semBorda tr, .semBorda td{
+	border : none !important;
+	padding: 0px 0px 0px 3px;
+	margin: px 0px 0px 0px;
+}
+
+.campoMensagem {
+	color = : #730000;
+	/*background-color:  #FFB2B2;*/
+	padding	:0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	
+}
+
+.geral {
+	height				: 100%;
+	width				: 100%;
+	background-color	: #FDFDFD;
+}
+
+.topo {
+	height				: 55px; /*50*/
+	background-image	: -webkit-gradient(linear, left top, left bottom, color-stop(0.87, #193263), color-stop(1, #FBF9FF));
+	/* IE10 */
+	background-image	: -ms-linear-gradient(top, #193263 80%, #FBF9FF 100%);
+	/* Firefox */
+	background-image	: -moz-linear-gradient(top, #193263 87%, #FBF9FF 100%);
+	/* Opera */
+	background-image	: -o-linear-gradient(top, #193263 80%, #FBF9FF 100%);
+	/*Safari/Chrome 10 */
+	background-image	: -webkit-gradient(linear, left top, left bottom, color-stop(0.8, #193263), color-stop(1, #FBF9FF));
+	/* Chrome 11 */ 
+	background-image	: -webkit-linear-gradient(top, #193263 80%, #FBF9FF 100%);
+	/* W3C& */ 
+	background-image	: linear-gradient(to bottom, #193263 80%, #FBF9FF 100%);
+}
+
+.topoConteudo {
+	overflow			: hidden;
+	width				: 950px;
+	height				: 45px;
+	margin-left			: auto;
+	margin-right		: auto;
+}
+
+.corpo {
+	background-image	: url('../imagens/background.jpg');
+	background-repeat	: repeat-x;
+	height				: 93%;							/* falta de suporte */
+	height				: -webkit-calc(100% - 77px);	/* Chrome */
+	height				: -moz-calc(100% - 77px);		/* Firefox */
+	height				: calc(100% - 77px);			/* Nativo */
+	padding-top			: 20px;
+}
+
+.conteudo {
+	border-color	: #F0F0F0;
+	border			: 0px;
+	border-style	: solid;
+	width			: 950px;
+	height			: 100%;
+	margin-left		: auto;
+	margin-right	: auto;
+	color			: black;
+}
+
+/*
+
+.logo {
+	background :url('../imagens/logoSigra.png') no-repeat 0px 5px; 
+	display    :block; 
+	width      :170px; 
+	height     :50px;
+	float      :right;
+}
+
+.logoEstado{
+	background :url('../imagens/logoEstado.png') no-repeat 0px 3px; 
+	display    :block; 
+	width      :170px; 
+	height     :50px;
+	float      :left;
+}
+
+/*
+.indexTabela {
+	border-color     :#F0F0F0;
+	width            :920px;
+	border           :1px;
+	border-style     :solid;
+	border-collapse  :collapse;
+	padding          :0px;
+	margin           :0px;
+	background-color :#F8F8F8;	
+}
+
+.indexCelulaTopo {
+	font-weight  :bold; 
+	text-align   :center;  
+	border       :1px;
+   	border-style :solid;
+  	border-color :#E0E0E0; 		
+}
+
+.indexCelula {
+	padding-left :3px;
+	border       :1px;
+   	border-style :solid;
+   	border-color :#E0E0E0 ;
+    background-color: 99FFCC;			
+}
+
+.loginForm {
+	background-color : #F8F8F8  ;
+	left:475px;
+	text-align : center;
+	position : absolute;
+	width:300px; 
+	height :200px;
+	margin-top :160px;
+	border:2px solid #aac8f1; 
+	-webkit-border-radius:5px; 
+	-moz-border-radius:5px; 
+	border-radius:5px; 
+}
+
+.loginTitulo {
+	font-size: 28px; 
+	font-weight: bold; 
+	color: #014171; 
+}
+
+.loginSubTitulo {
+	font-size: 15px;
+}
+
+.loginCampos {
+	margin-top:  15px; 
+	text-align :left; 
+	padding-left: 82px;
+}
+
+.botao {
+   	background:#d4e6fc; 
+	height: 13px; 
+	font-size:11px; 
+	font-weight:normal; 
+	color:#15428b; 
+	text-decoration:none; 
+	border:1px solid #aac8f1; 
+	padding:5px 10px 5px 10px; 
+	margin:5px 5px 5px 5px; 
+	-webkit-border-radius:5px; 
+	-moz-border-radius:5px; 
+	border-radius:5px; 	
+   
+   }
+
+.botao:hover {
+	color:6699FF; 
+}
+	
+/*.tooltip {
+    background-color:#000;
+    border:1px solid #fff;
+    padding:10px 15px;
+    width:200px;
+    display:none;
+    color:#fff;
+    text-align:left;
+    font-size:12px;
+ */
+    /* aki nao outline radius for mozilla/firefox only */
+    /*
+    -moz-box-shadow:0 0 10px #000;
+    -webkit-box-shadow:0 0 10px #000;
+}*/
+
+/*
+.conteudoSimples{
+	width :950px;
+    margin:0 20px 0 0; 
+    float:left; 
+    padding-bottom:5px;	
+}
+
+.conteudoDuplo{
+    margin:0 20px 0 0; 
+    float:left; 
+    padding-bottom:5px;	
+	width :475px; 
+}
+
+.conteudoTriplo{
+	width :316px;
+}
+
+   .linha{
+        padding:0;
+        clear:both;
+    }
+
+    .coluna{    
+    */
+        /* aki nao height:25px;*/
+        
+        /*
+        border: 1px solid #000000;
+        width:120;      
+        float:left;
+    }
+
+
+h3 {
+	font           :25px bolder verdana, sans-serif;
+	color          :#686868;
+	letter-spacing :-0.05em;
+	clear          :both; 
+	margin-top     : 10px;
+	margin-bottom: : 10px;
+	text-shadow    : 0.09em 0.09em 0.09em #909090;
+}
+
+
+.ui-datatable thead th{
+	padding: 0 0 0 0 !important;
+}
+
+.ui-datatable tbody td {
+	padding: 0 0 0 0 !important;
+}
+*/
+	

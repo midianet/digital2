@@ -1,0 +1,189 @@
+<?xml version	= "1.0" 
+	  encoding	= "ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<ui:composition	xmlns		= "http://www.w3.org/1999/xhtml"
+				xmlns:h		= "http://java.sun.com/jsf/html"
+				xmlns:f		= "http://java.sun.com/jsf/core"
+				xmlns:p		= "http://primefaces.org/ui"
+				xmlns:ui	= "http://java.sun.com/jsf/facelets"
+				xmlns:pe 	= "http://primefaces.org/ui/extensions"
+				template	= "/layout/interno.xhtml">
+	<ui:define name = "Conteudo">
+		<h:form id="frCadastro">
+			<p:fieldset style = "padding	: 5px; width		: 608px;" id = "area" >
+				<h:panelGrid	columns		= "2" styleClass="porCima" style = "border: none;" cellspacing	= "3">
+					<p:outputLabel	for		= "txCNPJ" value	= "Cnpj*" />
+					<p:column style="vertical-align: text-bottom;">
+						<p:outputLabel for = "txRazaoSocial" value = "Razão Social*" />
+						<p:selectBooleanCheckbox id ="ckAtivo" style="float:right;" value = "#{clienteMB.formulario.ativo}"/>
+						<p:outputLabel value="Ativo" for = "ckAtivo"  style = "float:right;" />
+					</p:column>
+					<p:inputMask id = "txCNPJ" mask = "99.999.999/9999-99" binding = "#{txCnpj}" converter="conversorSemFormatoString" style="width : 111px;" value ="#{clienteMB.formulario.cnpj}">
+						<p:tooltip for="txCNPJ" rendered ="#{!txCnpj.valid}">
+							<h:message for = "txCNPJ" tooltip="true" styleClass ="campoMensagem" />
+						</p:tooltip>
+						<p:ajax event="change" listener="#{clienteMB.pesquisarCnpj()}" update="@form" />
+					</p:inputMask>
+					<p:inputText id = "txRazaoSocial"  maxlength ="60" binding = "#{txRazaoSocial}" value = "#{clienteMB.formulario.razaoSocial}" style="width : 466px;" >
+						<pe:tooltip global="false" myPosition="left center" atPosition="right center" for="txRazaoSocial">
+							<p:message for="txRazaoSocial" display="text" />
+						</pe:tooltip> 
+					</p:inputText>
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "3" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txInscricao" value = "Inscrição*" />
+					<p:outputLabel for = "txSuframa" value = "Suframa" />
+					<p:outputLabel for = "txFantasia" value = "Fantasia*" />
+					<p:inputText id = "txInscricao" style="width : 111px;" maxlength="40" value ="#{clienteMB.formulario.inscricaoEstadual}" />
+					<p:inputText id = "txSuframa" style="width : 111px;" maxlength="40" value ="#{clienteMB.formulario.suframa}" />
+					<p:column>
+						<p:inputText id = "txFantasia" style="width : 340px;" maxlength="60" value ="#{clienteMB.formulario.fantasia}" />
+						<p:tooltip for="txFantasia"  showEffect="fade" hideEffect="fade" value="Digite o seu nome Fantasia." >
+							<p:message for="txFantasia" display="text"/>
+						</p:tooltip>
+					</p:column>
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "3" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txCep" value = "Cep*" />
+					<p:outputLabel for = "cbUf" value = "Uf*" />
+					<p:outputLabel for = "cbMunicipio" value = "Município*" />
+					<p:inputMask id = "txCep" style="width : 76px;" mask="99.999-999" converter="conversorSemFormatoString" value = "#{clienteMB.formulario.cep}">
+						<p:ajax event ="change" listener="#{clienteMB.preencherEndereco()}" update = "cbUf, cbMunicipio, cbBairro, txLogradouro" />
+					</p:inputMask>
+					<p:selectOneMenu id = "cbUf" style = "width:85px;" converter="conversorEntidade" filter = "true" filterMatchMode = "startsWith" value="#{clienteMB.formulario.uf}">
+						<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+						<f:selectItems value = "#{clienteMB.listaUfs}" var="uf" itemLabel="#{uf.id}" itemValue="#{uf}"/>
+						<p:ajax event="change" update="cbMunicipio,cbBairro"/>
+					 </p:selectOneMenu>
+					
+					<p:selectOneMenu id = "cbMunicipio" style = "width:418px;" converter="conversorEntidade" value="#{clienteMB.formulario.municipio}" filter = "true" filterMatchMode = "startsWith">
+						<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+						<f:selectItems value = "#{clienteMB.listaMunicipios}" var = "municipio" itemLabel = "#{municipio.nome}" itemValue="#{municipio}"/>
+						<p:ajax event="change" update = "cbBairro"/>
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "2" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "cbBairro" value = "Bairro*" />
+					<p:outputLabel for = "txLogradouro" value = "Logradouro*" />
+					<p:selectOneMenu id = "cbBairro" style = "width:265px;" converter="conversorEntidade" value="#{clienteMB.formulario.bairro}" filter = "true" filterMatchMode = "startsWith">
+						<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+						<f:selectItems value = "#{clienteMB.listaBairros}" var="bairro" itemLabel="#{bairro.nome}" itemValue="#{bairro}"/>
+					</p:selectOneMenu>
+					<p:inputText id = "txLogradouro" style="width : 318px;" maxlength="60" value = "#{clienteMB.formulario.logradouro}"/>
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "2" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txNumero" value = "Número/Q/L*" />
+					<p:outputLabel for = "txComplemento" value = "Complemento" />
+					<p:inputText id = "txNumero" style="width : 66px;" maxlength="60" value ="#{clienteMB.formulario.numero}" />
+					<p:inputText id = "txComplemento" style="width : 510px;" maxlength="60" value ="#{clienteMB.formulario.complemento}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "4" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txFonePrincipal" value = "Tel. Principal*" />
+					<p:outputLabel for = "txFoneComercial" value = "Tel.Comercial*" />
+					<p:outputLabel for = "txFax" value = "Fax" />
+					<p:outputLabel for = "txEmail" value = "Email*" />
+					<p:inputMask id = "txFonePrincipal" style="width : 76px;" mask = "(99)9999-9999" value ="#{clienteMB.formulario.telefone}" converter="conversorSemFormatoString" />
+					<p:inputMask id = "txFoneComercial" style="width : 76px;" mask = "(99)9999-9999" value ="#{clienteMB.formulario.telefoneComercial}" converter="conversorSemFormatoString" />
+					<p:inputMask id = "txFax" style="width : 76px;" mask = "(99)9999-9999" value ="#{clienteMB.formulario.fax}" converter="conversorSemFormatoString" />
+					<p:inputText id = "txEmail" style="width : 323px;" value ="#{clienteMB.formulario.email}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "2" style = "border: none;" cellspacing ="3">
+					<p:column>
+						<p:outputLabel for = "txComercial" value = "Responsável Comercial" />
+						<p:outputLabel for = "txComercialAniversario" value = "/Aniversário" />
+					</p:column>
+					<p:outputLabel for = "txFinanceiro" value = "Responsável Financeiro" />
+					<p:column>
+						<p:inputText id = "txComercial" style="width : 260px;" value ="#{clienteMB.formulario.responsavelCompras}" />
+						<p:inputMask id = "txComercialAniversario" style="width : 30px;" mask = "99/99"  value ="#{clienteMB.formulario.responsalveComprasAniversario}" converter="conversorSemFormatoString" />
+					</p:column>
+					<p:inputText id = "txFinanceiro" style="width : 276px;" value ="#{clienteMB.formulario.responsavelFinanceiro}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "1" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txObservacao" value = "Observação" />
+					<p:inputTextarea id = "txObservacao" style="width:591px;" value ="#{clienteMB.formulario.observacao}" rows="4" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "4" style = "border: none;" cellspacing ="3">
+					<p:commandButton value="Novo" update="area" action="#{clienteMB.novo()}" process="@this">
+						<p:resetInput target="area" />
+					</p:commandButton>
+					<p:commandButton value="Salvar" type="submit" actionListener ="#{clienteMB.salvar()}" process="@form" update="@form" />
+					<p:commandButton value="Excluir" type = "button" onclick = "dlExcluir.show()" disabled="#{clienteMB.formulario.id == null}"/>
+					<p:commandButton value="Pesquisa" action="#{clienteMB.abrirPesquisa()}" oncomplete="dlPesquisa.show()" update=":frPesquisa:jnPesquisa"/>
+				</h:panelGrid>
+				<p:confirmDialog message 	= "Confima a exclusão do Cliente?"
+								 header 		= "Confirmação"
+								 severity	= "alert"
+								 widgetVar	= "dlExcluir"
+								 style     =  "text-align:center">
+					<center>
+						<p:commandButton	value	= "Não"
+											id		= "btNao"
+											onclick	= "dlExcluir.hide();"
+											icon="ui-icon-close"
+											style = "margin-left : 10px; float: left;"
+											type	= "button" />
+						<p:commandButton	value	= "Sim" 
+											action	= "#{clienteMB.excluir()}"
+											icon="ui-icon-check"
+											style = "margin-right : 10px; float : right;"
+											update	= "@form"
+											onclick	= "dlExcluir.hide()"/>
+					</center>
+				</p:confirmDialog>
+			</p:fieldset>
+		</h:form>
+		
+		<h:form id = "frPesquisa">
+			<p:dialog header="Pesquisa de Cliente" id="jnPesquisa" widgetVar="dlPesquisa" resizable="false" draggable="true" width="700" minHeight="300" showEffect="fade" hideEffect="fade" modal="true">  
+				<h:panelGrid	columns		= "3" style = "border: none;" cellspacing = "3">
+					<p:outputLabel	for		= "txCNPJPesq" value	= "Cnpj" />
+					<p:outputLabel for = "txRazaoSocialPesq" value = "Razão Social" />
+					<p:outputLabel	value	= "" />
+					<p:inputText id = "txCNPJPesq" style="width : 111px;" value ="#{clienteMB.formularioPesquisa.cnpj}"/>
+					<p:inputText id = "txRazaoSocialPesq"  maxlength="60" value ="#{clienteMB.formularioPesquisa.razaoSocial}" style="width : 457px;"/>
+					<p:commandButton value = "Pesquisar" action = "#{clienteMB.pesquisar()}" process = "@form" update = "tbResultado"/>
+				</h:panelGrid>
+				<p:dataTable id						= "tbResultado"
+							 var					= "cliente"
+							 value					= "#{clienteMB.resultadoPesquisa}"
+							 paginator				= "true"
+							 rows					= "5"
+							 selectionMode			= "single"
+							 selection				= "#{clienteMB.clienteSelecionado}"
+							 lazy="false"
+							 rowKey					= "#{cliente.id}"
+							 emptyMessage			= "Nenhum registro encontrado."
+							 paginatorAlwaysVisible	= "true"
+							 paginatorPosition		= "bottom"
+							 paginatorTemplate		= "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							 rowsPerPageTemplate	 = "5,10,15">
+					<p:ajax event="rowSelect" immediate = "true" update = ":frCadastro" />
+					<f:facet name = "header">
+						Resultado da Pesquisa
+					</f:facet>
+					
+					<p:column headerText = "Cnpj" sortBy = "#{cliente.cnpj}" width = "120">
+						<h:outputText value = "#{cliente.cnpj}" />
+					</p:column>
+					
+					<p:column	headerText = "Razão Social" sortBy = "#{cliente.razaoSocial}" >
+						<h:outputText value = "#{cliente.razaoSocial}" />
+					</p:column>
+					
+				</p:dataTable>
+				<p:commandButton value="Fechar" type="button" onclick="dlPesquisa.hide()" style="margin-top : 5px;" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,266 @@
+<?xml version	= "1.0" 
+	  encoding	= "ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<ui:composition	xmlns		= "http://www.w3.org/1999/xhtml"
+				xmlns:h		= "http://java.sun.com/jsf/html"
+				xmlns:f		= "http://java.sun.com/jsf/core"
+				xmlns:p		= "http://primefaces.org/ui"
+				xmlns:ui	= "http://java.sun.com/jsf/facelets"
+				template	= "/layout/interno.xhtml">
+	<ui:define name = "Conteudo">
+		<h:form id="frCadastro">
+			<p:fieldset style = "padding	: 5px; width		: 608px;" id = "area" >
+				<h:panelGrid	columns		= "2" styleClass="porCima" style = "border: none;" cellspacing	= "3">
+					<p:outputLabel	for		= "txCNPJ" value	= "Cnpj*" />
+					<p:column style="vertical-align: text-bottom;">
+						<p:outputLabel for = "txRazaoSocial" value = "Razão Social*" />
+						<p:selectBooleanCheckbox id ="ckAtivo" style="float:right;" value = "#{fornecedorMB.formulario.ativo}"/>
+						<p:outputLabel value="Ativo" for = "ckAtivo"  style = "float:right;" />
+					</p:column>
+					<p:inputMask id = "txCNPJ" mask = "99.999.999/9999-99" binding = "#{txCnpj}" converter="conversorSemFormatoString" style="width : 111px;" value ="#{fornecedorMB.formulario.cnpj}">
+						<p:tooltip for="txCNPJ" rendered ="#{!txCnpj.valid}">
+							<h:message for = "txCNPJ" tooltip="true" styleClass ="campoMensagem" />
+						</p:tooltip>
+						<p:ajax event="change" listener="#{fornecedorMB.pesquisarCnpj()}" update="@form" />
+					</p:inputMask>
+					<p:inputText id = "txRazaoSocial"  maxlength ="60" binding = "#{txRazaoSocial}" value = "#{fornecedorMB.formulario.razaoSocial}" style="width : 466px;" >
+						<p:tooltip for="txRazaoSocial" rendered ="#{!txRazaoSocial.valid}">
+							<h:message for = "txRazaoSocial" tooltip = "true" styleClass = "campoMensagem" />
+						</p:tooltip>
+					</p:inputText>
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "2" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txInscricao" value = "Inscrição*" />
+					<p:outputLabel for = "txFantasia" value = "Fantasia*" />
+					<p:inputText id = "txInscricao" style="width : 111px;" maxlength="40" value ="#{fornecedorMB.formulario.inscricaoEstadual}" />
+					<p:inputText id = "txFantasia" style="width : 466px;" maxlength="60" value ="#{fornecedorMB.formulario.fantasia}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "3" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txCep" value = "Cep*" />
+					<p:outputLabel for = "cbUf" value = "Uf*" />
+					<p:outputLabel for = "cbMunicipio" value = "Município*" />
+					<p:inputMask id = "txCep" style="width : 76px;" mask="99.999-999" converter="conversorSemFormatoString" value = "#{fornecedorMB.formulario.cep}">
+						<p:ajax event ="change" listener="#{fornecedorMB.preencherEndereco()}" update = "cbUf, cbMunicipio, cbBairro, txLogradouro" />
+					</p:inputMask>
+					<p:selectOneMenu id = "cbUf" style = "width:85px;" converter="conversorEntidade" filter = "true" filterMatchMode = "startsWith" value="#{fornecedorMB.formulario.uf}">
+						<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+						<f:selectItems value = "#{fornecedorMB.listaUfs}" var="uf" itemLabel="#{uf.id}" itemValue="#{uf}"/>
+						<p:ajax event="change" update="cbMunicipio,cbBairro"/>
+					 </p:selectOneMenu>
+					
+					<p:selectOneMenu id = "cbMunicipio" style = "width:418px;" converter="conversorEntidade" value="#{fornecedorMB.formulario.municipio}" filter = "true" filterMatchMode = "startsWith">
+						<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+						<f:selectItems value = "#{fornecedorMB.listaMunicipios}" var = "municipio" itemLabel = "#{municipio.nome}" itemValue="#{municipio}"/>
+						<p:ajax event="change" update = "cbBairro"/>
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "2" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "cbBairro" value = "Bairro*" />
+					<p:outputLabel for = "txLogradouro" value = "Logradouro*" />
+					<p:selectOneMenu id = "cbBairro" style = "width:265px;" converter="conversorEntidade" value="#{fornecedorMB.formulario.bairro}" filter = "true" filterMatchMode = "startsWith">
+						<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+						<f:selectItems value = "#{fornecedorMB.listaBairros}" var="bairro" itemLabel="#{bairro.nome}" itemValue="#{bairro}"/>
+					</p:selectOneMenu>
+					<p:inputText id = "txLogradouro" style="width : 318px;" maxlength="60" value = "#{fornecedorMB.formulario.logradouro}"/>
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "2" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txNumero" value = "Número/Q/L*" />
+					<p:outputLabel for = "txComplemento" value = "Complemento" />
+					<p:inputText id = "txNumero" style="width : 66px;" maxlength="60" value ="#{fornecedorMB.formulario.numero}" />
+					<p:inputText id = "txComplemento" style="width : 510px;" maxlength="60" value ="#{fornecedorMB.formulario.complemento}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "4" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txFonePrincipal" value = "Tel. Principal*" />
+					<p:outputLabel for = "txFoneComercial" value = "Tel.Comercial*" />
+					<p:outputLabel for = "txFax" value = "Fax" />
+					<p:outputLabel for = "txEmail" value = "Email*" />
+					<p:inputMask id = "txFonePrincipal" style="width : 76px;" mask = "(99)9999-9999" value ="#{fornecedorMB.formulario.telefone}" converter="conversorSemFormatoString" />
+					<p:inputMask id = "txFoneComercial" style="width : 76px;" mask = "(99)9999-9999" value ="#{fornecedorMB.formulario.telefoneComercial}" converter="conversorSemFormatoString" />
+					<p:inputMask id = "txFax" style="width : 76px;" mask = "(99)9999-9999" value ="#{fornecedorMB.formulario.fax}" converter="conversorSemFormatoString" />
+					<p:inputText id = "txEmail" style="width : 323px;" value ="#{fornecedorMB.formulario.email}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "2" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txVendedor" value = "Vendedor" />
+					<p:outputLabel for = "txFinanceiro" value = "Responsável Financeiro" />
+					<p:inputText id = "txVendedor" style="width : 288px;" value ="#{fornecedorMB.formulario.vendedor}" />
+					<p:inputText id = "txFinanceiro" style="width : 290px;" value ="#{fornecedorMB.formulario.financeiro}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "2" style = "border : none;" cellspacing="" cellpadding="3" >
+					<p:panel style = "padding : 0px 0px 0px 0px; margin : 0px 0px 0px 0px;">
+						<p:panelGrid styleClass ="semBorda" >
+							<p:row style = "border : none;">
+								<p:column colspan="3" style="text-align : center; heigth: 10px;" >
+									<p:outputLabel value = "Conta Primária"/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column >
+									<p:outputLabel value = "Banco" for = "cbContaPrimariaBanco" />
+								</p:column>
+								<p:column >
+									<p:outputLabel value = "Agência" for="txContaPrimariaAgencia" />
+								</p:column>
+								<p:column >
+									<p:outputLabel value = "Conta" for="txContaPrimariaNumero" />
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column>
+									<p:selectOneMenu id = "cbContaPrimariaBanco" value = "#{fornecedorMB.formulario.contaPrimarioBanco}" converter="conversorEntidade" style = "width : 133px;">
+										<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+										<f:selectItems value = "#{fornecedorMB.listaBancos}" var="bancoPrimario" itemLabel="#{bancoPrimario.nome}" itemValue="#{bancoPrimario}"/>
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:inputText id = "txContaPrimariaAgencia" value = "#{fornecedorMB.formulario.contaPrimariaAgencia}" style="width: 40px;"/>
+								</p:column>
+								<p:column>
+									<p:inputText id = "txContaPrimariaNumero"  value = "#{fornecedorMB.formulario.contaPrimariaNumero}" style="width: 63px;" />
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column colspan="3">
+									<p:outputLabel value = "Favorecido" for="txContaPrimariaFavorecido"/>
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column colspan="3">
+									<p:inputText id= "txContaPrimariaFavorecido" value = "#{fornecedorMB.formulario.contaPrimariaFavorecido}" style = "width: 263px"/>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:panel>	
+					<p:panel style = "padding : 0px 0px 0px 0px; margin : 0px 0px 0px 0px;">
+						<p:panelGrid styleClass ="semBorda" >
+							<p:row style = "border : none;">
+								<p:column colspan="3" style="text-align : center; heigth: 10px;" >
+									<p:outputLabel value = "Conta Secundária"/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column >
+									<p:outputLabel value = "Banco" for = "cbContaSecundariaBanco" />
+								</p:column>
+								<p:column >
+									<p:outputLabel value = "Agência" for="txContaSecundariaAgencia" />
+								</p:column>
+								<p:column >
+									<p:outputLabel value = "Conta" for="txContaSecundariaNumero" />
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column>
+									<p:selectOneMenu id = "cbContaSecundariaBanco" value = "#{fornecedorMB.formulario.contaSecundariaBanco}" converter="conversorEntidade" style = "width : 133px;">
+										<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+										<f:selectItems value = "#{fornecedorMB.listaBancos}" var="bancoSecundario" itemLabel="#{bancoSecundario.nome}" itemValue="#{bancoSecundario}"/>
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<p:inputText id = "txContaSecundariaAgencia" value = "#{fornecedorMB.formulario.contaSecundariaAgencia}" style="width: 40px;"/>
+								</p:column>
+								<p:column>
+									<p:inputText id = "txContaSecundariaNumero" value = "#{fornecedorMB.formulario.contaSecundariaNumero}" style="width: 63px;" />
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column colspan="3">
+									<p:outputLabel value = "Favorecido" for="txContaSecundariaFavorecido" />
+								</p:column>
+							</p:row>
+							<p:row >
+								<p:column colspan="3">
+									<p:inputText id= "txContaSecundariaFavorecido"  style = "width: 263px" value = "#{fornecedorMB.formulario.contaSecundariaFavorecido}"/>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:panel>	
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "1" style = "border: none;" cellspacing ="3">
+					<p:outputLabel for = "txObservacao" value = "Observação" />
+					<p:inputTextarea id = "txObservacao" style="width:591px;" value ="#{fornecedorMB.formulario.observacao}" rows="2" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns = "4" style = "border: none;" cellspacing ="3">
+					<p:commandButton value="Novo" update="area" action="#{fornecedorMB.novo()}" process="@this">
+						<p:resetInput target="area" />
+					</p:commandButton>
+					<p:commandButton value="Salvar" type="submit" actionListener ="#{fornecedorMB.salvar()}" process="@form" update="@form" />
+					<p:commandButton value="Excluir" type = "button" onclick = "dlExcluir.show()" disabled="#{fornecedorMB.formulario.id == null}"/>
+					<p:commandButton value="Pesquisa" action="#{fornecedorMB.abrirPesquisa()}" oncomplete="dlPesquisa.show()" update=":frPesquisa:jnPesquisa"/>
+				</h:panelGrid>
+				<p:confirmDialog message 	= "Confima a exclusão do Fornecedor?"
+								 header 		= "Confirmação"
+								 severity	= "alert"
+								 widgetVar	= "dlExcluir"
+								 style     =  "text-align:center">
+					<center>
+						<p:commandButton	value	= "Não"
+											id		= "btNao"
+											onclick	= "dlExcluir.hide();"
+											icon="ui-icon-close"
+											style = "margin-left : 10px; float: left;"
+											type	= "button" />
+						<p:commandButton	value	= "Sim" 
+											action	= "#{fornecedorMB.excluir()}"
+											icon="ui-icon-check"
+											style = "margin-right : 10px; float : right;"
+											update	= "@form"
+											onclick	= "dlExcluir.hide()"/>
+					</center>
+				</p:confirmDialog>
+			</p:fieldset>
+		</h:form>
+		
+		<h:form id = "frPesquisa">
+			<p:dialog header="Pesquisa de Fornecedor" id="jnPesquisa" widgetVar="dlPesquisa" resizable="false" draggable="true" width="700" minHeight="300" showEffect="fade" hideEffect="fade" modal="true">  
+				<h:panelGrid	columns		= "3" style = "border: none;" cellspacing = "3">
+					<p:outputLabel	for		= "txCNPJPesq" value	= "Cnpj" />
+					<p:outputLabel for = "txRazaoSocialPesq" value = "Razão Social" />
+					<p:outputLabel	value	= "" />
+					<p:inputText id = "txCNPJPesq" style="width : 111px;" value ="#{fornecedorMB.formularioPesquisa.cnpj}"/>
+					<p:inputText id = "txRazaoSocialPesq"  maxlength="60" value ="#{fornecedorMB.formularioPesquisa.razaoSocial}" style="width : 457px;"/>
+					<p:commandButton value = "Pesquisar" action = "#{fornecedorMB.pesquisar()}" process = "@form" update = "tbResultado"/>
+				</h:panelGrid>
+				<p:dataTable id						= "tbResultado"
+							 var					= "fornecedor"
+							 value					= "#{fornecedorMB.resultadoPesquisa}"
+							 paginator				= "true"
+							 rows					= "5"
+							 selectionMode			= "single"
+							 selection				= "#{fornecedorMB.selecionado}"
+							 lazy					= "false"
+							 rowKey					= "#{fornecedor.id}"
+							 emptyMessage			= "Nenhum registro encontrado."
+							 paginatorAlwaysVisible	= "true"
+							 paginatorPosition		= "bottom"
+							 paginatorTemplate		= "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							 rowsPerPageTemplate	= "5,10,15">
+					<p:ajax event="rowSelect" immediate = "true" update = ":frCadastro" />
+					<f:facet name = "header">
+						Resultado da Pesquisa
+					</f:facet>
+					
+					<p:column headerText = "Cnpj" sortBy = "#{fornecedor.cnpj}" width = "120">
+						<h:outputText value = "#{fornecedor.cnpj}" />
+					</p:column>
+					
+					<p:column	headerText = "Razão Social" sortBy = "#{fornecedor.razaoSocial}" >
+						<h:outputText value = "#{fornecedor.razaoSocial}" />
+					</p:column>
+					
+				</p:dataTable>
+				<p:commandButton value="Fechar" type="button" onclick="dlPesquisa.hide()" style="margin-top : 5px;" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

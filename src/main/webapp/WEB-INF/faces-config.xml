@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+
+	<application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+			<supported-locale>pt_BR</supported-locale>
+		</locale-config>
+	
+	</application>
+<!-- 
+	<navigation-rule>
+		<from-view-id>/*</from-view-id>
+		<navigation-case>
+			<from-outcome>loginError</from-outcome>
+			<to-view-id>/views/nao_autenticado.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>loginDenied</from-outcome>
+			<to-view-id>/views/nao_autorizado.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+    <lifecycle>
+    	<phase-listener>gov.goias.jsf.security.PhaseListenerSecurity</phase-listener>
+	</lifecycle>
+ -->
+</faces-config>

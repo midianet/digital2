@@ -1,0 +1,115 @@
+<?xml version  = "1.0" 
+      encoding = "ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">    
+
+<html xmlns     = "http://www.w3.org/1999/xhtml"
+      xmlns:f   = "http://java.sun.com/jsf/core"
+	  xmlns:h   = "http://java.sun.com/jsf/html"
+      xmlns:p   = "http://primefaces.org/ui"
+      xmlns:ui  = "http://java.sun.com/jsf/facelets">
+	
+	<f:view>
+		<h:head>
+			<meta http-equiv = "content-type"
+				  content    = "text/html; charset = ISO-8859-1" />
+			<meta name       = "generator"
+			      content    = "Midianet - http://www.multimidianet.com/" />
+			<meta name       = "description" 
+			      content    = "Sigra - Sistema Corporativo" />
+			<link type = "text/css" 
+			      rel  = "stylesheet" 
+			      href = "${facesContext.externalContext.request.contextPath}/layout/css/sigra.css"/>
+			<title>Sigra - Sistema Corporativo</title>
+		</h:head>
+		<h:body>
+			<div class = "geral">
+				<div class = "topo">
+					<div class ="topoConteudo">
+			      		<p class = "logoEstado" style = "margin-left: 60px;" />
+						<p class = "logo"/>
+				        <div style = "margin-left :0px;
+				                      margin-top  :17px; 
+				                      position    :absolute; 
+				                      z-index     :100;">
+							<h:form>
+								<p:menubar style = "padding      : 0 0 0 0; 
+								                    border       :1px; 
+								                    border-style :solid; 
+								                    border-color :#C0C0C0;" >  
+									<p:submenu label = "Menu">  
+										<p:submenu label = "AAA" 
+										           icon  = "ui-icon-contact">  
+											<p:menuitem value  = "aaaa" 
+											            url    = "#" />  
+							                <p:menuitem value = "bbbb" 
+							                            url   = "#" />
+							            </p:submenu> 
+							            <p:submenu label = "BBB" 
+							                       icon  = "ui-icon-contact">  
+							                <p:menuitem value = "aaaa" 
+							                            url   = "#" />  
+							                <p:menuitem value = "bbbb"
+							                            url   = "#" />
+							                <p:menuitem value = "cccc"
+							                            url   = "#" />
+							            </p:submenu>
+							            <p:submenu label = "CCC" 
+							                       icon  = "ui-icon-contact">  
+							                <p:menuitem value = "aaaa" 
+							                            url   = "#" />  
+							                <p:menuitem value = "bbbb" 
+							                            url   = "#" />
+							                <p:menuitem value = "cccc"
+							                            url   = "#" />
+							                <p:menuitem value = "dddd" 
+							                            url   = "#" />
+							            </p:submenu>
+							            <p:separator />
+							            <p:menuitem value = "Sair" 
+							                        onclick = "confirmacaoSaida.show();"/>  
+							        </p:submenu>
+							    </p:menubar>
+						    </h:form>
+	  					</div>
+					</div>
+				</div>
+				<div class = "corpo">
+					<div class = "conteudo">
+	  					<div style = "margin-right  :0px;
+				                      float         :right; 
+				                      padding-right :20px; ">
+	  						Usuário: <h:outputText value="Usuário da Silva" />
+	  					</div>
+						<ui:insert name ="Migalha">
+							Migalha
+						</ui:insert>
+						<ui:insert name ="Conteudo">
+							<h2>Conteudo</h2>
+						</ui:insert>
+					</div>
+				</div>
+				<div class = "rodape">
+					<ui:include src = "rodape.xhtml" />						
+				</div>
+			</div>
+			 <p:confirmDialog id            = "confirmaSaida" 
+						      message       = "Confirma a Saída?"
+						      closable      = "true"
+						      closeOnEscape = "false"
+	              			  header        = "Sigra - Saída"
+	              			  severity      = "alert"
+	              			  widgetVar     = "confirmacaoSaida">
+				<h:form prependId = "false" >  
+					<p:commandButton id         = "btSaidaSim" 
+	     			                 value      = "Sim"
+	     			                 oncomplete = "confirmacaoSaida.hide()"/>  
+					<p:commandButton id         = "btSaidaNao" 
+	      				             value      = "Não" 
+	      				             onclick    = "confirmacaoSaida.hide()"/>
+				</h:form>
+			</p:confirmDialog>						    
+		</h:body>
+	</f:view>
+</html>

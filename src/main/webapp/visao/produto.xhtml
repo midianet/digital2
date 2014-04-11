@@ -1,0 +1,159 @@
+<?xml version	= "1.0" 
+	  encoding	= "ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<ui:composition	xmlns		= "http://www.w3.org/1999/xhtml"
+				xmlns:h		= "http://java.sun.com/jsf/html"
+				xmlns:f		= "http://java.sun.com/jsf/core"
+				xmlns:p		= "http://primefaces.org/ui"
+				xmlns:ui	= "http://java.sun.com/jsf/facelets"
+				template	= "/layout/interno.xhtml">
+	<ui:define name = "Conteudo">
+		<h:form id="frCadastro">
+			<p:fieldset style = "padding	: 5px; width		: 608px;" id = "area" >
+				<h:panelGrid	styleClass="porCima" columns		= "2" style = "border: none;" cellspacing	= "3">
+					<p:outputLabel	for		= "txCodigo" value	= "Código*" />
+					<p:column style="vertical-align: text-bottom;">
+						<p:outputLabel for = "txNome" value = "Descrição*" />
+						<p:selectBooleanCheckbox id ="ckAtivo" style="float:right;" value = "#{produtoMB.formulario.ativo}"/>
+						<p:outputLabel value="Ativo" for = "ckAtivo" style = "float:right;" />
+					</p:column>
+					<p:inputText id = "txCodigo" binding = "#{txCodigo}" style="width : 111px;" value ="#{produtoMB.formulario.codigo}">
+						<p:tooltip for="txCodigo" rendered ="#{!txCodigo.valid}">
+							<h:message for = "txCodigo" tooltip="true" styleClass ="campoMensagem" />
+						</p:tooltip>
+						<p:ajax event="change" listener="#{produtoMB.pesquisarCodigo()}" update="@form" />
+					</p:inputText>
+					<p:inputText id = "txNome"  maxlength="60" binding = "#{txNome}" value ="#{produtoMB.formulario.nome}" style="width : 466px;" >
+						<p:tooltip for="txNome" rendered ="#{!txNome.valid}">
+							<h:message for = "txNome" tooltip="true" styleClass ="campoMensagem" />
+						</p:tooltip>
+					</p:inputText>
+				</h:panelGrid>
+				
+				<h:panelGrid  styleClass="porCima" style = "border: none;" columns="3" cellspacing ="3"  >
+					<p:outputLabel for = "cbGrupo" value = "Grupo*" />
+					<p:outputLabel for = "cbUnidade" value = "U.Medida*" />
+					<p:outputLabel  value = "Foto" />
+					<p:selectOneMenu id = "cbGrupo" style = "width:150px;" converter="conversorEntidade" filter = "true" filterMatchMode = "startsWith" value="#{produtoMB.formulario.grupo}">
+						<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+						<f:selectItems value = "#{produtoMB.listaGrupos}" var="grupo" itemLabel="#{grupo.nome}" itemValue="#{grupo}"/>
+					 </p:selectOneMenu>
+					<p:selectOneMenu id = "cbUnidade" style = "width:150px;" converter="conversorEntidade" value="#{produtoMB.formulario.unidadeMedida}" filter = "true" filterMatchMode = "startsWith">
+						<f:selectItem itemLabel ="Selecione" itemValue ="" noSelectionOption="true"/>
+						<f:selectItems value = "#{produtoMB.listaUnidades}" var = "unidade" itemLabel = "#{unidade.nome}" itemValue="#{unidade}"/>
+					</p:selectOneMenu>
+					<p:column>
+					<p:graphicImage cache="false" id="imProduto" style = "width: 290px; height : 250px; border : 1px; border-style:solid; border-color: black;" value = "#{produtoMB.imagem}" />
+					<p:commandButton type="button" value="Carregar Imagem" onclick="fotoDialog.show()" /> 290 x 250
+					</p:column>
+				</h:panelGrid>
+				<h:panelGrid columns = "4" style = "border: none;" cellspacing ="3">
+					<p:commandButton value="Novo" update="area" action="#{produtoMB.novo()}" process="@this">
+						<p:resetInput target="area" />
+					</p:commandButton>
+					<p:commandButton value="Salvar" type="submit" actionListener ="#{produtoMB.salvar()}" process="@form" update="@form" />
+					<p:commandButton value="Excluir" type = "button" onclick = "dlExcluir.show()" disabled="#{produtoMB.formulario.id == null}"/>
+					<p:commandButton value="Pesquisa"  actionListener = "#{produtoMB.abrirPesquisa}" oncomplete="dlPesquisa.show()" update=":frPesquisa:jnPesquisa"/>
+				</h:panelGrid>
+				<p:confirmDialog message 	= "Confima a exclusão do Produto?"
+								 header 		= "Confirmação"
+								 severity	= "alert"
+								 widgetVar	= "dlExcluir"
+								 style     =  "text-align:center">
+					<center>
+						<p:commandButton	value	= "Não"
+											id		= "btNao"
+											onclick	= "dlExcluir.hide();"
+											icon="ui-icon-close"
+											style = "margin-left : 10px; float: left;"
+											type	= "button" />
+						<p:commandButton	value	= "Sim" 
+											action	= "#{produtoMB.excluir()}"
+											icon="ui-icon-check"
+											style = "margin-right : 10px; float : right;"
+											update	= "@form"
+											onclick	= "dlExcluir.hide()"/>
+					</center>
+				</p:confirmDialog>
+			</p:fieldset>
+		</h:form>
+		
+		<h:form id = "frPesquisa">
+			<p:dialog header="Pesquisa de Produto" id="jnPesquisa" widgetVar="dlPesquisa" resizable="false" draggable="true" width="700" minHeight="300" showEffect="fade" hideEffect="fade" modal="true">
+				<h:panelGrid	columns		= "3" style = "border: none;" cellspacing = "3">
+					<p:outputLabel	for		= "txCodigoPesq" value	= "Código" />
+					<p:outputLabel for = "txNomePesq" value = "Descrição" />
+					<p:outputLabel	value	= "" />
+					<p:inputText id = "txCodigoPesq" style="width : 111px;" value ="#{produtoMB.formularioPesquisa.codigo}"/>
+					<p:inputText id = "txNomePesq"  maxlength="60" value ="#{produtoMB.formularioPesquisa.nome}" style="width : 457px;"/>
+					<p:commandButton value = "Pesquisar" action = "#{produtoMB.pesquisar()}" process = "@form" update = "tbResultado"/>
+				</h:panelGrid>
+				<p:dataTable id						= "tbResultado"
+							 var					= "produto"
+							 value					= "#{produtoMB.resultadoPesquisa}"
+							 paginator				= "true"
+							 rows					= "5"
+							 selectionMode			= "single"
+							 selection				= "#{produtoMB.selecionado}"
+							 lazy="false"
+							 rowKey					= "#{produto.id}"
+							 emptyMessage			= "Nenhum registro encontrado."
+							 paginatorAlwaysVisible	= "true"
+							 paginatorPosition		= "bottom"
+							 paginatorTemplate		= "{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							 rowsPerPageTemplate	 = "5,10,15">
+					<p:ajax event="rowSelect" immediate = "true" update = ":frCadastro" />
+					<f:facet name = "header">
+						Resultado da Pesquisa
+					</f:facet>
+					
+					<p:column headerText = "Código" sortBy = "#{produto.codigo}" width = "120">
+						<h:outputText value = "#{produto.codigo}" />
+					</p:column>
+					
+					<p:column	headerText = "Descrição" sortBy = "#{produto.nome}" >
+						<h:outputText value = "#{produto.nome}" />
+					</p:column>
+					
+				</p:dataTable>
+				<p:commandButton value="Fechar" type="button" onclick="dlPesquisa.hide()" style="margin-top : 5px;" />
+			</p:dialog>
+		</h:form>
+		
+		<h:form id="frUpload" enctype="multipart/form-data">
+			<p:dialog 	header="Adicionar imagem" 
+						widgetVar="fotoDialog"
+						position="center" 
+						resizable="false" 
+						id="fotoDlg" 
+						showEffect="fade"
+						hideEffect="explode" 
+						modal="true" 
+						width="570">
+				<h:panelGrid id ="infoFoto" columns="1">
+					<p:fileUpload 	fileUploadListener="#{produtoMB.upload}"
+									label="Escolher" 
+									multiple="false"
+									mode="advanced"	
+									cancelLabel="Cancelar" 
+									dragDropSupport="false"
+									showButtons="false"
+									sizeLimit="400000"
+									invalidSizeMessage="Imagem muito grande" 
+									auto="false"
+									fileLimit="1"
+									invalidFileMessage="Tipo de imagem não suportado"
+									oncomplete="fotoDialog.hide()"
+									allowTypes="/(\.|\/)(jpeg)$/"
+									update = ":frCadastro:imProduto"/>
+				</h:panelGrid>
+
+				<p:commandButton type="button" value="Fechar" onclick="fotoDialog.hide()" />
+			</p:dialog>
+		</h:form>
+
+		
+	</ui:define>
+</ui:composition>
